@@ -29,12 +29,12 @@ headers = {
 }
 
 # Prepare CSV file
-file = open('space_mountain.csv', 'w', newline='')
+file = open('space_mountain_2.csv', 'w', newline='')
 writer = csv.writer(file)
 writer.writerow(["Date", "Time", "Day of Week", "Month", "Time of Day", "Wait Time"])
 
 # Date setup
-datetime_str = '2014-12-06'
+datetime_str = '2020-03-14'
 datetime_object = datetime.strptime(datetime_str, '%Y-%m-%d')
 end_date = datetime.now()
 
@@ -43,6 +43,7 @@ pbar = tqdm(total=(end_date - datetime_object).days + 1, desc="Processing Days")
 while datetime_object <= end_date:
     params = {'given_date': datetime_str}
     response = requests.get('https://queue-times.com/en-US/parks/16/rides/284', params=params, cookies=cookies, headers=headers)
+    print(response.text)
     
     # Extract json_park_data
     text = response.text
