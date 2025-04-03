@@ -2,6 +2,7 @@ import requests
 import json
 import csv
 from datetime import datetime, timedelta
+from tqdm import tqdm
 
 # Request stuff
 cookies = {
@@ -30,46 +31,41 @@ headers = {
 # Prepare CSV file
 file = open('space_mountain.csv', 'w', newline='')
 writer = csv.writer(file)
-writer.writerow(["Date", "Time", "Wait Time"])
+writer.writerow(["Date", "Time", "Day of Week", "Month", "Time of Day", "Wait Time"])
 
-# Date stuff
+# Date setup
 datetime_str = '2014-12-06'
 datetime_object = datetime.strptime(datetime_str, '%Y-%m-%d')
-# end_date = datetime.now()
-end_date = datetime.strptime('2014-12-20', '%Y-%m-%d')
+end_date = datetime.now()
+
+pbar = tqdm(total=(end_date - datetime_object).days + 1, desc="Processing Days")
+
 while datetime_object <= end_date:
-    params = {
-        'given_date': datetime_str,
-    }
-    # THERE IS A BETTER URL GO TO CALENDAR --> https://queue-times.com/en-US/parks/16/calendar/2017/07/17
+    params = {'given_date': datetime_str}
     response = requests.get('https://queue-times.com/en-US/parks/16/rides/284', params=params, cookies=cookies, headers=headers)
+    
     # Extract json_park_data
     text = response.text
-    # print(text)
     start_idx = text.find('"name":"Reported by user"')
     end_idx = text.find('"colors":["#3273dc","#2c3e50"]')
     json_str = text[start_idx-3:end_idx-3]
     json_obj = json.loads(json_str)
-    json_pretty_str = json.dumps(json_obj, indent=2)
-    # print(json_pretty_str)
     json_park_data = json_obj[1]["data"]
-    # print("Index test:", json_park_data)
-    # print("LENGTH:", len(json_park_data))
-    # Fill in CSV file
-# Fill in CSV file
+    
     for entry in json_park_data:
-        date_str, time_str = entry[0].split()  # Split into date and time parts
-        wait_time = entry[1]
+        date_part, time_part = entry[0].split()  # Split date and time
+        time_obj = datetime.strptime(time_part, '%H:%M:%S')  # Convert time to datetime object
         
-        # Parse the time
-        time_obj = datetime.strptime(time_str, '%H:%M:%S')
-
-        # Only write to CSV if the time is at a 30-minute interval (e.g., 00:00, 00:30, 01:00, etc.)
-        if time_obj.minute % 30 == 0:
-            writer.writerow([date_str, time_str, wait_time])
+        if time_obj.minute % 30 == 0:  # Only write data at 30-minute intervals
+            day_of_week = datetime.strptime(date_part, '%m/%d/%y').strftime('%A')  # Get day of week
+            month = datetime.strptime(date_part, '%m/%d/%y').month  # Extract month as integer
+            time_of_day = time_obj.hour * 60 + time_obj.minute  # Convert to integer (minutes since midnight)
             
+            writer.writerow([date_part, time_part, day_of_week, month, time_of_day, entry[1]])
+    
     datetime_object += timedelta(days=1)
     datetime_str = datetime_object.strftime('%Y-%m-%d')
+    pbar.update(1)  # Manually increment progress bar
 
 # Close file
 file.close()
