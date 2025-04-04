@@ -14,13 +14,11 @@ args = parser.parse_args()
 filepath = args.filepath
 df = pd.read_csv(filepath)
 
+# ------ SPLITTING DATASET ------
 # train on 2014 (December), 2015, 2016, 2017, 2018, 2019, 2022 (excluding COVID years)
 # test on 2023, 2024, 2025 (January - March)
 train_years = ['14', '15', '16', '17', '18', '19', '22']
 test_years = ['23', '24', '25']
-
-# train_years = ['15']
-# test_years = ['14']
 
 df['Year'] = df['Date'].apply(lambda x: x.split('/')[-1])  # Extract year as a string
 train_df = df[df['Year'].isin(train_years)]  # Filter rows where Year is in train_years
