@@ -24,7 +24,7 @@ df = pd.get_dummies(df, columns=['Day of Week'], drop_first=True)
 # train on 2014 (December), 2015, 2016, 2017, 2018, 2019, 2022 (excluding COVID years)
 # validation on 2023
 # test on 2024, 2025 (January - March)
-years = ['15', '16', '17', '18', '19', '22', '23', '24']
+# years = ['15', '16', '17', '18', '19', '22', '23', '24']
 # train_years = random.sample(years, 6)
 # train_years.append('14')
 # test_years = [item for item in years if item not in train_years]
