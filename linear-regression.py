@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error
 import math
 from sklearn.linear_model import LinearRegression
+import random 
 
 # parsing arguments
 parser = argparse.ArgumentParser()
@@ -23,6 +24,12 @@ df = pd.get_dummies(df, columns=['Day of Week'], drop_first=True)
 # train on 2014 (December), 2015, 2016, 2017, 2018, 2019, 2022 (excluding COVID years)
 # validation on 2023
 # test on 2024, 2025 (January - March)
+years = ['15', '16', '17', '18', '19', '22', '23', '24']
+# train_years = random.sample(years, 6)
+# train_years.append('14')
+# test_years = [item for item in years if item not in train_years]
+# test_years.append('25')
+
 train_years = ['14', '15', '16', '17', '18', '19', '22']
 test_years = ['23', '24', '25']
 
@@ -39,6 +46,9 @@ X_train = train_df.drop(columns=['Wait Time', 'Date', 'Time', 'Year'])
 y_test = test_df['Wait Time'].values
 X_test = test_df.drop(columns=['Wait Time', 'Date', 'Time', 'Year'])
 
+# print(X_train.columns)
+
+
 # create linear regression model
 model = LinearRegression()
 model.fit(X_train, y_train)
@@ -53,4 +63,3 @@ plt.plot(y_test, label='Actual')
 plt.plot(y_pred, label='Predicted')
 plt.legend()
 plt.show()
-
