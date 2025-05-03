@@ -10,7 +10,7 @@ import random
 
 # %%
 # read input file
-filepath = "space_mountain.csv"
+filepath = "space_mountain_with_holiday_weather_lag_suite.csv"
 df = pd.read_csv(filepath)
 
 # %%
@@ -39,9 +39,9 @@ train_df.shape, test_df.shape
 # %%
 # getting datasets
 y_train = train_df['Wait Time'].values
-X_train = train_df.drop(columns=['Wait Time', 'Date', 'Time', 'Year', 'Month'])
+X_train = train_df.drop(columns=['Wait Time', 'Date', 'Time', 'Year'])
 y_test = test_df['Wait Time'].values
-X_test = test_df.drop(columns=['Wait Time', 'Date', 'Time', 'Year', 'Month'])
+X_test = test_df.drop(columns=['Wait Time', 'Date', 'Time', 'Year'])
 
 print("X_train:")
 print(X_train.head())

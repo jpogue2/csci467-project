@@ -8,7 +8,7 @@ from sklearn.preprocessing import StandardScaler
 
 # %%
 # read input file
-filepath = "space_mountain.csv"
+filepath = "space_mountain_with_holiday_weather_lag_suite.csv"
 df = pd.read_csv(filepath)
 
 # %%
@@ -32,9 +32,9 @@ test_df = df[df['Year'].isin(test_years)]
 # %%
 # get feature matrices and labels
 y_train = train_df['Wait Time'].values
-X_train = train_df.drop(columns=['Wait Time', 'Date', 'Time', 'Year', 'Month'])
+X_train = train_df.drop(columns=['Wait Time', 'Date', 'Time', 'Year'])
 y_test = test_df['Wait Time'].values
-X_test = test_df.drop(columns=['Wait Time', 'Date', 'Time', 'Year', 'Month'])
+X_test = test_df.drop(columns=['Wait Time', 'Date', 'Time', 'Year'])
 
 # %%
 # normalize features (important for MLP)
@@ -68,3 +68,5 @@ plt.ylabel("Frequency")
 plt.grid(True)
 plt.tight_layout()
 plt.show()
+
+
