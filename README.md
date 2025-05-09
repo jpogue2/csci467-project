@@ -1,25 +1,29 @@
-1. Lasso regression with lag suite (alpha=1.0): RMSE = 16.57 <--
-2. Lasso-XGBoost Ensemble: RMSE = 16.60
-3. Linear regression with lag suite: RMSE = 16.70 <--
-4. XGBoost with lag suite: RMSE = 16.72 <--
-5. XGBoost with lag: RMSE = 16.91
-6. Simplified lasso regression: RMSE = 16.94
-7. Linear regression with lag: RMSE = 17.00
-8. NN-V1 with lag suite: RMSE = 17.20 <--
-9. NN-V2 with lag suite: RMSE = 17.20
-10. NN-V2 original dataset: RMSE = 17.25
-11. XGBoost with holiday and weather: RMSE = 17.25
-12. NN-V2 with lag: RMSE = 17.28
-13. Linear regression with holiday: RMSE: 17.32
-14. Linear regression original dataset: RMSE = 17.39
-15. XGBoost with holiday: RMSE = 17.39
-16. Statistical baseline: RMSE = 17.41
-17. NN-V1 with holiday: RMSE = 17.42
-18. NN-V1 original dataset: RMSE = 17.43
-19. NN-V2 with holiday: RMSE = 17.44
-20. Linear regression with holiday and weather: RMSE = 17.47
-21. NN-V2 with holiday and weather: RMSE = 17.48
-22. XGBoost original dataset: RMSE = 17.55
-23. NN-V1 with holiday and weather: RMSE = 17.56
-24. Conv1D: RMSE = 18.22
-25. LSTM: RMSE = 18.68
+This project investigates the performance of several machine learning models in predicting wait times for Space Mountain using historical data. We created our own dataset stemming from data from [Queue Times](https://queue-times.com/en-US/parks/16/rides/284). In addition to features we gathered from this website on wait times, date, time, etc. our project works on enhancing this dataset with holiday / weather information, in addition to incorporating lag features to capture the time series aspect of our dataset. With this, we achieved models predicting wait times within 15 minutes of actual values. The following explains the files and folders you can find in this code base.
+
+### Folders
+data_enhancement: folder containing files to add features to create the enhanced dataset tested. Includes files to add holiday, lag, and weather features.
+
+pred_err: folder containing prediction errors for our baseline, linear regression, and linear regression with lag models for use in comparison of datasets.
+
+### Code Files
+statistical-baseline.ipynb: file containing code to test our statistical baseline model, which predicts wait times by averaging wait times per 30 minute interval across all days of the week over all availabe months and years.
+
+linear-regression.ipynb: file containing code to test our standard linear regression model. 
+
+linear-with-regularization.ipynb: file containing code to test our standard linear regression model with L1 regularization. 
+
+xg-boost.ipynb: file containing code to test our xgboost regressor model, using grid search to select hyperparameters
+
+nn-v1.ipynb: file containing code to build and test a multilayer perceptron model architecture, using grid search to select hyperparameters.
+
+### CSV Files
+space_mountain.csv: our original, baseline dataset containing Date, Time, Day of Week, Month, Time of Day, and Wait Time (target).
+
+space_mountain_with_holiday_weather_lag_new.csv: our enhanced dataset, that includes original features along with various holiday features (capturing current date holiday and adjacency to holidays), weather features (temperature and percpitation), and lag features (capturing wait times from previous days in addition to previous 30-minute and 60-minute interval)
+
+mlp_hyperparameter_search.csv: contains data on how our mlp was performing with the over 1,000 combinations of hyperparameters used to tune the model.
+
+
+## Creators
+Irika Katiyar (@irika-katiyar)
+Jeremy Pogue (@jpogue2)
